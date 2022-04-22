@@ -31,7 +31,7 @@ void DrawPainter::DrawChessPieces(const GoBangBoard& c) {
         for(int j = 0; j < Grid_num; j++) {
             int now_player_id = c.getBoardPositionID(i, j);
             int black_player_id = c.getBlackPlayerID();
-            if(now_player_id != No_Chess_Piece) {
+            if(now_player_id != No_Player) {
                 if(now_player_id == black_player_id) {
                     radi.setColorAt(0, qRgb(Black1, Black1, Black1));
                     this->setBrush(radi);

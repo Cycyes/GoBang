@@ -7,6 +7,7 @@
 #include "base.h"
 #include "BoardPosition.h"
 #include "PushButton.h"
+#include "ai.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -37,6 +38,7 @@ public:
     void PVPRound();
     void PVEPutPiece(const BoardPosition &next_move, const int id);
     void PVPPutPiece(const BoardPosition &next_move, const int id);
+    void aiMove(const BoardPosition& next_move);
 
 private:
     Ui::MainWindow *ui;
@@ -49,6 +51,8 @@ private:
     BoardPosition mouse_cursor;
     BoardPosition record_moves[Grid_num * Grid_num];
     int gobang_cnt;
+
+    AI ai;
 
 
 

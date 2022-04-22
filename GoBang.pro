@@ -13,6 +13,7 @@ SOURCES += \
     DrawPainter.cpp \
     GoBangBoard.cpp \
     PushButton.cpp \
+    ai.cpp \
     main.cpp \
     mainwindow.cpp
 
@@ -21,6 +22,7 @@ HEADERS += \
     DrawPainter.h \
     GoBangBoard.h \
     PushButton.h \
+    ai.h \
     base.h \
     mainwindow.h
 

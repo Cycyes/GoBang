@@ -14,7 +14,7 @@ void GoBangBoard::putPiece(int x, int y, int id) {
 }
 
 void GoBangBoard::takePiece(int x, int y) {
-    board[y][x] = No_Chess_Piece;
+    board[y][x] = No_Player;
 }
 
 void GoBangBoard::setBlackPlayerID(int player_id) {
@@ -38,7 +38,7 @@ bool GoBangBoard::isInside(const BoardPosition& c) const {
 }
 
 bool GoBangBoard::isAvaliable(const BoardPosition& c) const {
-    return c.x >= 0 && c.x < Grid_num && c.y >= 0 && c.y < Grid_num && board[c.y][c.x] == No_Chess_Piece;
+    return c.x >= 0 && c.x < Grid_num && c.y >= 0 && c.y < Grid_num && board[c.y][c.x] == No_Player;
 }
 
 bool GoBangBoard::win(const BoardPosition &move, const int id) {

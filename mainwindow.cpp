@@ -3,6 +3,7 @@
 #include "base.h"
 #include "DrawPainter.h"
 #include "GoBangBoard.h"
+#include "ai.h"
 
 #include <QPropertyAnimation>
 #include <QMessageBox>
@@ -19,7 +20,6 @@ MainWindow::MainWindow(QWidget *parent)
     this->initButton();
     this->initConnections();
 
-    //
     if(game_mode == PVE) {
         this->resetPVEGame();
         this->startPVEGame();
@@ -152,12 +152,12 @@ void MainWindow::startPVEGame() {
     now_player_id = black_player_id;
     gobang_board.setBlackPlayerID(black_player_id);
     if(black_player_id == AI_Player) {
-
+        ai.set_id(true);
+        const BoardPosition &next_move = ai.ai_run();
+        this->aiMove(next_move);
     }
-    else if(black_player_id == H1_Player) {
-
-    }
-
+    else if(black_player_id == H1_Player)
+        ai.set_id(false);
 }
 
 void MainWindow::startPVPGame() {
@@ -167,25 +167,38 @@ void MainWindow::startPVPGame() {
 
 void MainWindow::resetPVEGame() {
     gobang_cnt = 0;
-
+    mouse_cursor = {init_flag, init_flag};
+    gobang_board.initboard();
+    ai.initboard();
+    ai.set_depth(3);
+    ai.set_cnt(0);
+    this->update();
 }
 
 void MainWindow::resetPVPGame() {
     gobang_cnt = 0;
     mouse_cursor.x = mouse_cursor.y = init_flag;
     gobang_board.initboard();
+    ai.initboard();
     this->update();
 }
 
 void MainWindow::retractPVEGame() {
     if(gobang_cnt >= 3) {
-
+        const BoardPosition& last_human_move = record_moves[gobang_cnt - 2];
+        const BoardPosition& last_ai_move = record_moves[gobang_cnt - 1];
+        ai.takePiece(last_human_move.x, last_human_move.y);
+        ai.takePiece(last_ai_move.x, last_ai_move.y);
+        gobang_board.takePiece(last_human_move.x, last_human_move.y);
+        gobang_board.takePiece(last_ai_move.x, last_ai_move.y);
+        this->update();
+        gobang_cnt -= 2;
+        ai.set_cnt(gobang_cnt);
     }
     else {
         this->resetPVEGame();
         this->startPVEGame();
     }
-    //this->resetMarks();
 }
 
 void MainWindow::retractPVPGame() {
@@ -204,7 +217,18 @@ void MainWindow::retractPVPGame() {
 }
 
 void MainWindow::PVERound() {
-
+    this->PVEPutPiece(mouse_cursor, H1_Player);
+    this->update();
+    if(gobang_board.win(mouse_cursor, H1_Player)) {
+        QMessageBox::information(this, "", "玩家胜利！");
+        this->resetPVEGame();
+        this->startPVEGame();
+    }
+    else {
+        now_player_id = AI_Player;
+        const BoardPosition &next_move = ai.ai_run();
+        this->aiMove(next_move);
+    }
 }
 
 void MainWindow::PVPRound() {
@@ -231,7 +255,12 @@ void MainWindow::PVPRound() {
 }
 
 void MainWindow::PVEPutPiece(const BoardPosition &next_move, const int id) {
-
+    if(gobang_board.isAvaliable(next_move)) {
+        gobang_board.putPiece(next_move.x, next_move.y, id);
+        ai.putPiece(next_move.x, next_move.y, id);
+        record_moves[gobang_cnt++] = next_move;
+        ai.set_cnt(gobang_cnt);
+    }
 }
 
 void MainWindow::PVPPutPiece(const BoardPosition &next_move, const int id) {
@@ -239,6 +268,18 @@ void MainWindow::PVPPutPiece(const BoardPosition &next_move, const int id) {
         gobang_board.putPiece(next_move.x, next_move.y, id);
         record_moves[gobang_cnt++] = next_move;
     }
+}
+
+void MainWindow::aiMove(const BoardPosition& next_move) {
+    this->PVEPutPiece(next_move, AI_Player);
+    this->update();
+    if(gobang_board.win(next_move, AI_Player)) {
+        QMessageBox::information(this, "", "AI胜利啦！");
+        this->resetPVEGame();
+        this->startPVEGame();
+    }
+    else
+        now_player_id = H1_Player;
 }
 /*----------------------------------------game---------------------------------*/
 
@@ -250,7 +291,6 @@ void MainWindow::paintEvent(QPaintEvent *event) {
 
     if(gobang_board.isAvaliable(mouse_cursor) && now_player_id != AI_Player)
         painter.DrawMark();
-    //
 
     //draw all chess pieces
     painter.DrawChessPieces(gobang_board);
