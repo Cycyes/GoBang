@@ -1,7 +1,8 @@
 #ifndef BOARDPOSITION_H
 #define BOARDPOSITION_H
 
-struct BoardPosition {
+class BoardPosition {
+public:
     int x, y;
     BoardPosition();
     BoardPosition(int x, int y);

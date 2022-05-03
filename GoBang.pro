@@ -11,18 +11,18 @@ CONFIG += c++17
 SOURCES += \
     BoardPosition.cpp \
     DrawPainter.cpp \
+    GoBangAi.cpp \
     GoBangBoard.cpp \
     PushButton.cpp \
-    ai.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
     BoardPosition.h \
     DrawPainter.h \
+    GoBangAi.h \
     GoBangBoard.h \
     PushButton.h \
-    ai.h \
     base.h \
     mainwindow.h
 

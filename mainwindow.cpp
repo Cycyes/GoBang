@@ -1,10 +1,6 @@
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
-#include "base.h"
-#include "DrawPainter.h"
-#include "GoBangBoard.h"
-#include "ai.h"
 
+#include <QApplication>
 #include <QPropertyAnimation>
 #include <QMessageBox>
 #include <QEvent>
@@ -79,8 +75,6 @@ void MainWindow::initButton() {
 }
 
 void MainWindow::initConnections() {
-    //
-
     //set connections of menu buttons
     connect(button_menu + Min_Button, &PushButton::clicked, this, &MainWindow::showMinimized);
     connect(button_menu + Close_Button, &PushButton::clicked, this, &MainWindow::close);
@@ -169,8 +163,7 @@ void MainWindow::resetPVEGame() {
     gobang_cnt = 0;
     mouse_cursor = {init_flag, init_flag};
     gobang_board.initboard();
-    ai.initboard();
-    ai.set_depth(3);
+    ai.init();
     ai.set_cnt(0);
     this->update();
 }
@@ -179,7 +172,7 @@ void MainWindow::resetPVPGame() {
     gobang_cnt = 0;
     mouse_cursor.x = mouse_cursor.y = init_flag;
     gobang_board.initboard();
-    ai.initboard();
+    ai.init();
     this->update();
 }
 

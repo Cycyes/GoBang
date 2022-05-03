@@ -7,8 +7,8 @@
 #include "base.h"
 #include "BoardPosition.h"
 #include "PushButton.h"
-#include "ai.h"
-
+#include "GoBangAi.h"
+#include "DrawPainter.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -52,9 +52,7 @@ private:
     BoardPosition record_moves[Grid_num * Grid_num];
     int gobang_cnt;
 
-    AI ai;
-
-
+    GoBangAi ai;
 
     PushButton button_ctrl[Button_Ctrl_num];
     PushButton button_menu[Button_Menu_num];

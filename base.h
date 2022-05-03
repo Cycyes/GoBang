@@ -12,12 +12,13 @@ enum Game_Mode {
     PVP
 };
 
-enum Game_Player {
+enum Game_Player_Type {
     No_Player,
     AI_Player,
     H1_Player,
     H2_Player,
-    Out_Player
+    Border_Player,
+    Type_num
 };
 
 enum Window_SIZE {
@@ -75,32 +76,5 @@ enum Button_Menu_Pos {
     Button_Menu_start_Y = Button_Menu_Height / 4,
     Button_Menu_end_Y = Button_Menu_Height + Button_Menu_start_Y
 };
-
-const int position_value[Grid_num][Grid_num] = {
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-    {0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0},
-    {0, 1, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 1, 0},
-    {0, 1, 2, 3, 4, 4, 4, 4, 4, 4, 4, 3, 2, 1, 0},
-    {0, 1, 2, 3, 4, 5, 5, 5, 5, 5, 4, 3, 2, 1, 0},
-    {0, 1, 2, 3, 4, 5, 6, 6, 6, 5, 4, 3, 2, 1, 0},
-    {0, 1, 2, 3, 4, 5, 6, 7, 6, 5, 4, 3, 2, 1, 0},
-    {0, 1, 2, 3, 4, 5, 6, 6, 6, 5, 4, 3, 2, 1, 0},
-    {0, 1, 2, 3, 4, 5, 5, 5, 5, 5, 4, 3, 2, 1, 0},
-    {0, 1, 2, 3, 4, 4, 4, 4, 4, 4, 4, 3, 2, 1, 0},
-    {0, 1, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 1, 0},
-    {0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0},
-    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-};
-
-const int direction[4][2] = {
-    {1, 0},
-    {0, 1},
-    {1, 1},
-    {1, -1}
-};
-
-const int Negative_Infinity = -0x3f3f3f3f;
 
 #endif // BASE_H
