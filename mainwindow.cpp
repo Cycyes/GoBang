@@ -358,8 +358,8 @@ void MainWindow::findNearPos(const Point &near_pos, int x, int y) {
         int xi = x0 + dx[i] * Grid_Width, yi = y0 + dy[i] * Grid_Width;
         int now_dis = Distance(x, y, xi, yi);
         if(Detect_Radius >= now_dis && min_dis > now_dis) {
-            mouse_cursor.x = near_pos.x + dx[i] - 1;
-            mouse_cursor.y = near_pos.y + dy[i] - 1;
+            mouse_cursor.x = near_pos.x + dx[i];
+            mouse_cursor.y = near_pos.y + dy[i];
             min_dis = now_dis;
         }
     }

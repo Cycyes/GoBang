@@ -40,16 +40,16 @@ void DrawPainter::DrawPieces(const GoBangBoard& c) {
                 if(now_player_id == black_player_id) {
                     radi.setColorAt(0, qRgb(Black1, Black1, Black1));
                     this->setBrush(radi);
-                    this->drawEllipse(Board_start_X + Grid_Width * (i + 1) - Chess_Piece_Radius, Board_start_X + Grid_Width * (j + 1) - Chess_Piece_Radius, Chess_Piece_Radius * 2, Chess_Piece_Radius * 2);
+                    this->drawEllipse(Board_start_X + Grid_Width * i - Chess_Piece_Radius, Board_start_X + Grid_Width * j - Chess_Piece_Radius, Chess_Piece_Radius * 2, Chess_Piece_Radius * 2);
                 }
                 else {
                     radi.setColorAt(0, qRgb(Black2, Black2, Black2));
                     this->setBrush(radi);
-                    this->drawEllipse(Board_start_X + Grid_Width * (i + 1) - Chess_Piece_Radius, Board_start_X + Grid_Width * (j + 1) - Chess_Piece_Radius, Chess_Piece_Radius * 2, Chess_Piece_Radius * 2);
+                    this->drawEllipse(Board_start_X + Grid_Width * i - Chess_Piece_Radius, Board_start_X + Grid_Width * j - Chess_Piece_Radius, Chess_Piece_Radius * 2, Chess_Piece_Radius * 2);
 
                     radi.setColorAt(0, qRgb(White, White, White));
                     this->setBrush(radi);
-                    this->drawEllipse(Board_start_X + Grid_Width * (i + 1) - Chess_Piece_Radius, Board_start_X + Grid_Width * (j + 1) - Chess_Piece_Radius, Chess_Piece_Radius * 2, Chess_Piece_Radius * 2);
+                    this->drawEllipse(Board_start_X + Grid_Width * i - Chess_Piece_Radius, Board_start_X + Grid_Width * j - Chess_Piece_Radius, Chess_Piece_Radius * 2, Chess_Piece_Radius * 2);
                 }
             }
         }
@@ -68,7 +68,7 @@ void DrawPainter::DrawLastMove(const Point& c, bool is_black) {
         radi.setColorAt(0, qRgb(White, White, White));
 
     this->setBrush(radi);
-    this->drawEllipse(Board_start_X + Grid_Width * (c.x + 1) - Mark_Radius, Board_start_X + Grid_Width * (c.y + 1) - Mark_Radius, 2 * Mark_Radius, 2 * Mark_Radius);
+    this->drawEllipse(Board_start_X + Grid_Width * c.x - Mark_Radius, Board_start_X + Grid_Width * c.y - Mark_Radius, 2 * Mark_Radius, 2 * Mark_Radius);
 
     this->setPen(prev_pen);
 }

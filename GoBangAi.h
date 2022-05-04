@@ -51,8 +51,8 @@ const int weight[status_num] = {0, 1000000, -1000000, 50000, -100000, 400, -1000
 //the most valuable points
 const int Point_num = 20;
 struct Points {
-    Point point[Point_num];
-    int score[Point_num];
+    Point point[Point_num] = {};
+    int score[Point_num] = {};
 };
 
 struct Evaluation {
