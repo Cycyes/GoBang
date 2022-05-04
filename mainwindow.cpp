@@ -229,13 +229,14 @@ void MainWindow::retractPVPGame() {
 void MainWindow::PVERound() {
     this->PVEPutPiece(mouse_cursor, H1_Player);
     this->update();
+    now_player_id = AI_Player;
+    this->repaint();
     if(gobang_board.win(mouse_cursor, H1_Player)) {
         QMessageBox::information(this, "", "玩家胜利啦！");
         this->resetPVEGame();
         this->startPVEGame();
     }
     else {
-        now_player_id = AI_Player;
         const Point &next_move = ai.ai_run();
         this->aiMove(next_move);
     }
