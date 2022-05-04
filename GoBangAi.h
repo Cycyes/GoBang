@@ -1,6 +1,7 @@
 #ifndef GOBANGAI_H
 #define GOBANGAI_H
 
+#include <cmath>
 #include "base.h"
 #include "Point.h"
 #include "GoBangBoard.h"

@@ -68,10 +68,10 @@ void MainWindow::initButton() {
     //set button content
     button_menu[Min_Button].setText("-");
     button_menu[Close_Button].setText("x");
-    button_ctrl[New_Button].setText("New");
-    button_ctrl[Mode_Button].setText("Mode");
-    button_ctrl[Change_Button].setText("Change");
-    button_ctrl[Retract_Button].setText("Retract");
+    button_ctrl[New_Button].setText("新的一局");
+    button_ctrl[Mode_Button].setText("切换模式");
+    button_ctrl[Change_Button].setText("切换先手");
+    button_ctrl[Retract_Button].setText("悔棋");
 }
 
 void MainWindow::initConnections() {
@@ -213,7 +213,7 @@ void MainWindow::PVERound() {
     this->PVEPutPiece(mouse_cursor, H1_Player);
     this->update();
     if(gobang_board.win(mouse_cursor, H1_Player)) {
-        QMessageBox::information(this, "", "玩家胜利！");
+        QMessageBox::information(this, "", "玩家胜利啦！");
         this->resetPVEGame();
         this->startPVEGame();
     }

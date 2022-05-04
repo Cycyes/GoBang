@@ -205,22 +205,22 @@ int GoBangAi::gettuplescore(int humannum, int ainum, int c) {
     else if(humannum >= 1 && ainum >= 1)
         return 0;
     else if(c == H1_Player) {
-       if(humannum == 1 && ainum == 0)
-           return 35;
-       else if(humannum == 2 && ainum == 0)
-           return 800;
-       else if(humannum == 3 && ainum == 0)
-           return 15000;
-       else if(humannum == 4 && ainum == 0)
-           return 800000;
-       else if(humannum == 0 && ainum == 1)
-           return 15;
-       else if(humannum == 0 && ainum == 2)
-           return 400;
-       else if(humannum == 0 && ainum == 3)
-           return 1800;
-       else
-           return 100000;
+        if(humannum == 1 && ainum == 0)
+            return 35;
+        else if(humannum == 2 && ainum == 0)
+            return 800;
+        else if(humannum == 3 && ainum == 0)
+            return 15000;
+        else if(humannum == 4 && ainum == 0)
+            return 800000;
+        else if(humannum == 0 && ainum == 1)
+            return 15;
+        else if(humannum == 0 && ainum == 2)
+            return 400;
+        else if(humannum == 0 && ainum == 3)
+            return 1800;
+        else
+            return 100000;
     }
     else {
         if(humannum == 1 && ainum == 0)
