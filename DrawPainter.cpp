@@ -65,7 +65,7 @@ void DrawPainter::DrawLastMove(const Point& c, bool is_black) {
         this->setPen(qRgb(Black1, Black1, Black1));
     }
     else
-        radi.setColorAt(0, qRgb(Black1, Black1, Black1));
+        radi.setColorAt(0, qRgb(White, White, White));
 
     this->setBrush(radi);
     this->drawEllipse(Board_start_X + Grid_Width * (c.x + 1) - Mark_Radius, Board_start_X + Grid_Width * (c.y + 1) - Mark_Radius, 2 * Mark_Radius, 2 * Mark_Radius);
