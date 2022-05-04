@@ -57,12 +57,14 @@ void MainWindow::initButton() {
     for(int i = 0; i < Button_Ctrl_num; i++) {
         button_ctrl[i].setParent(this);
         button_ctrl[i].setGeometry(Button_Ctrl_start_X + i * Button_Ctrl_D, Button_Ctrl_start_Y, Button_Ctrl_Width, Button_Ctrl_Height);
-        //button_ctrl[i].setStyleSheet(Butt)
+        //button_ctrl[i].setFlat(true);
+        button_ctrl[i].setStyleSheet(QString("QPushButton{border:2px solid #000000"));
     }
     for(int i = 0; i < Button_Menu_num; i++) {
         button_menu[i].setParent(this);
         button_menu[i].setGeometry(Button_Menu_start_X + i * Button_Menu_D, Button_Menu_start_Y, Button_Menu_Width, Button_Menu_Height);
-        //button_menu[i].set
+        button_menu[i].setStyleSheet(QString("QPushButton{border:2px solid #000000"));
+        button_menu[i].setFlat(true);
     }
 
     //set button content
@@ -72,6 +74,13 @@ void MainWindow::initButton() {
     button_ctrl[Mode_Button].setText("切换模式");
     button_ctrl[Change_Button].setText("切换先手");
     button_ctrl[Retract_Button].setText("悔棋");
+
+    for(int i = 0; i < 3; i++) {
+        message_text[i].setParent(this);
+        message_text[i].setGeometry(Button_Ctrl_start_X + (i + 1) * Button_Ctrl_D, Button_Ctrl_start_Y + 50, Button_Ctrl_Width + 20, Button_Ctrl_Height);
+    }
+
+    message_text[2].setText(QString("当前步数：%1").arg(gobang_cnt));
 }
 
 void MainWindow::initConnections() {
@@ -115,10 +124,12 @@ void MainWindow::initConnections() {
             [&]() {
         if(game_mode == PVE) {
             if(now_player_id == H1_Player) {
-                if(black_player_id == AI_Player)
+                if(black_player_id == AI_Player) {
                     black_player_id = H1_Player;
-                else
+                }
+                else {
                     black_player_id = AI_Player;
+                }
                 this->resetPVEGame();
                 this->startPVEGame();
             }
@@ -143,18 +154,24 @@ void MainWindow::initConnections() {
 
 /*----------------------------------------game---------------------------------*/
 void MainWindow::startPVEGame() {
+    message_text[0].setText(QString("当前模式：%1").arg(QString("人机")));
     now_player_id = black_player_id;
     gobang_board.setBlackPlayerID(black_player_id);
     if(black_player_id == AI_Player) {
         ai.set_id(true);
         const Point &next_move = ai.ai_run();
         this->aiMove(next_move);
+        message_text[1].setText(QString("当前先手：%1").arg(QString("电脑")));
     }
-    else if(black_player_id == H1_Player)
+    else if(black_player_id == H1_Player) {
         ai.set_id(false);
+        message_text[1].setText(QString("当前先手：%1").arg(QString("人")));
+    }
 }
 
 void MainWindow::startPVPGame() {
+    message_text[0].setText(QString("当前模式：%1").arg(QString("人人")));
+    message_text[1].setText(QString("当前先手：%1").arg(QString("人")));
     now_player_id = black_player_id;
     gobang_board.setBlackPlayerID(black_player_id);
 }
@@ -288,6 +305,8 @@ void MainWindow::paintEvent(QPaintEvent *event) {
     //draw last move
     if(gobang_cnt && gobang_board.isInside(record_moves[gobang_cnt - 1]))
         painter.DrawLastMove(record_moves[gobang_cnt - 1], now_player_id == black_player_id);
+
+    message_text[2].setText(QString("当前步数：%1").arg(gobang_cnt));
 }
 
 void MainWindow::mouseMoveEvent(QMouseEvent *event) {
@@ -307,11 +326,13 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event) {
 }
 
 void MainWindow::mousePressEvent(QMouseEvent *event) {
+    /*
     if(ReleaseCapture() && event->y() <= Button_Menu_D) {
         QWidget *pWindow = this->window();
         if(pWindow->isTopLevel())
             SendMessage(HWND(pWindow->winId()),WM_SYSCOMMAND, SC_MOVE + HTCAPTION, 0);
     }
+    */
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {

@@ -73,9 +73,9 @@ enum Button_Ctrl_Pos {
 };
 
 enum Button_Menu_Pos {
-    Button_Menu_Width = 30,
+    Button_Menu_Width = 50,
     Button_Menu_Height = 30,
-    Button_Menu_D = 32,
+    Button_Menu_D = 52,
     Button_Menu_start_X = Window_Width - Button_Menu_num * (int)(Button_Menu_D * 1.15),
     Button_Menu_start_Y = Button_Menu_Height / 4,
     Button_Menu_end_Y = Button_Menu_Height + Button_Menu_start_Y

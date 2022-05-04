@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QLabel>
 
 #include "GoBangBoard.h"
 #include "base.h"
@@ -56,6 +57,7 @@ private:
 
     PushButton button_ctrl[Button_Ctrl_num];
     PushButton button_menu[Button_Menu_num];
+    QLabel message_text[3];
 
     int Distance(int x0, int y0, int x1, int y1);
     void findNearPos(const Point & near_pos, int x, int y);
