@@ -13,14 +13,3 @@ void PushButton::closeEvent(QEvent* event) {
     animation->start();
     event->accept();
 }
-
-/*
-void PushButton::test() {
-    QPropertyAnimation *animation = new QPropertyAnimation(this, "windowOpacity");
-    animation->setDuration(3000);
-    animation->setStartValue(1);
-    animation->setEndValue(0);
-    animation->start();
-    connect(animation, &QPropertyAnimation::finished, this, &PushButton::hide);
-}
-*/

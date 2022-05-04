@@ -3,6 +3,8 @@
 
 #include <QDebug>
 
+/*-----------------------parameter set----------------------------*/
+/*--------------------------game logic----------------------------*/
 enum Game_Flag {
     init_flag = -1
 };
@@ -17,10 +19,12 @@ enum Game_Player_Type {
     AI_Player,
     H1_Player,
     H2_Player,
-    Border_Player,
+    Border,
     Type_num
 };
+/*--------------------------game logic----------------------------*/
 
+/*------------------------------ui--------------------------------*/
 enum Window_SIZE {
     Window_Width = 790,
     Window_Height = (int)(Window_Width * 1.082)
@@ -76,5 +80,7 @@ enum Button_Menu_Pos {
     Button_Menu_start_Y = Button_Menu_Height / 4,
     Button_Menu_end_Y = Button_Menu_Height + Button_Menu_start_Y
 };
+/*------------------------------ui--------------------------------*/
+/*-----------------------parameter set----------------------------*/
 
 #endif // BASE_H

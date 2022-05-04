@@ -8,18 +8,15 @@
 
 #include "base.h"
 #include "GoBangBoard.h"
-#include "BoardPosition.h"
+#include "Point.h"
 
 class DrawPainter : public QPainter {
 public:
     DrawPainter(QPaintDevice* parent = Q_NULLPTR);
     void init();
     void DrawBoard();
-    void DrawKeyPos();
-    void DrawMark();
-    void DrawAIPreMove();
-    void DrawChessPieces(const GoBangBoard& c);
-    void DrawLastMove(const BoardPosition& c, bool is_black);
+    void DrawPieces(const GoBangBoard& c);
+    void DrawLastMove(const Point& c, bool is_black);
 };
 
 #endif // DRAWPAINTER_H

@@ -2,7 +2,7 @@
 #define GOBANGBOARD_H
 
 #include "base.h"
-#include "BoardPosition.h"
+#include "Point.h"
 
 class GoBangBoard {
 private:
@@ -18,9 +18,9 @@ public:
     int getBoardPositionID(int x, int y) const;
 
     bool isInside(int r, int c) const;
-    bool isInside(const BoardPosition &c) const;
-    bool isAvaliable(const BoardPosition &c) const;
-    bool win(const BoardPosition &move, const int id);
+    bool isInside(const Point &c) const;
+    bool isAvaliable(const Point &c) const;
+    bool win(const Point &move, const int id);
 };
 
 #endif // GOBANGBOARD_H

@@ -1,18 +1,21 @@
 #include "GoBangAi.h"
 
+/*-----------------------------function------------------------------------*/
 bool isInside(int row, int col) {
     if(row >= 0 && row < Grid_num && col >= 0 && col < Grid_num)
         return true;
     return false;
 }
 
-BoardPosition getPoint(int row, int col, int dir, int rel) {
-    BoardPosition p;
+Point getPoint(int row, int col, int dir, int rel) {
+    Point p;
     p.x = col + rel * direction[dir][1];
     p.y = row + rel * direction[dir][0];
     return p;
 }
+/*-----------------------------function------------------------------------*/
 
+/*-----------------------------game logic----------------------------------*/
 GoBangAi::GoBangAi() {
     init();
 }
@@ -42,16 +45,16 @@ void GoBangAi::init() {
     tuple6type[AI_Player][AI_Player][AI_Player][AI_Player][AI_Player][AI_Player] = ai_win;
     tuple6type[AI_Player][AI_Player][AI_Player][AI_Player][AI_Player][No_Player] = ai_win;
     tuple6type[No_Player][AI_Player][AI_Player][AI_Player][AI_Player][AI_Player] = ai_win;
-    tuple6type[AI_Player][AI_Player][AI_Player][AI_Player][AI_Player][Border_Player] = ai_win;
-    tuple6type[Border_Player][AI_Player][AI_Player][AI_Player][AI_Player][AI_Player] = ai_win;
+    tuple6type[AI_Player][AI_Player][AI_Player][AI_Player][AI_Player][Border] = ai_win;
+    tuple6type[Border][AI_Player][AI_Player][AI_Player][AI_Player][AI_Player] = ai_win;
     tuple6type[AI_Player][AI_Player][AI_Player][AI_Player][AI_Player][H1_Player] = ai_win;
     tuple6type[H1_Player][AI_Player][AI_Player][AI_Player][AI_Player][AI_Player] = ai_win;
     // human win
     tuple6type[H1_Player][H1_Player][H1_Player][H1_Player][H1_Player][H1_Player] = ai_lose;
     tuple6type[H1_Player][H1_Player][H1_Player][H1_Player][H1_Player][No_Player] = ai_lose;
     tuple6type[No_Player][H1_Player][H1_Player][H1_Player][H1_Player][H1_Player] = ai_lose;
-    tuple6type[H1_Player][H1_Player][H1_Player][H1_Player][H1_Player][Border_Player] = ai_lose;
-    tuple6type[Border_Player][H1_Player][H1_Player][H1_Player][H1_Player][H1_Player] = ai_lose;
+    tuple6type[H1_Player][H1_Player][H1_Player][H1_Player][H1_Player][Border] = ai_lose;
+    tuple6type[Border][H1_Player][H1_Player][H1_Player][H1_Player][H1_Player] = ai_lose;
     tuple6type[H1_Player][H1_Player][H1_Player][H1_Player][H1_Player][AI_Player] = ai_lose;
     tuple6type[AI_Player][H1_Player][H1_Player][H1_Player][H1_Player][H1_Player] = ai_lose;
     // flex4
@@ -128,8 +131,8 @@ void GoBangAi::init() {
                             else if (p6 == AI_Player)
                                 right_Ai_num++;
 
-                            if (p1 == Border_Player || p6 == Border_Player) {
-                                if (p1 == Border_Player && p6 != Border_Player) {
+                            if (p1 == Border || p6 == Border) {
+                                if (p1 == Border && p6 != Border) {
                                     if (right_human_num == 0 && right_Ai_num == 4 && tuple6type[p1][p2][p3][p4][p5][p6] == 0)
                                         tuple6type[p1][p2][p3][p4][p5][p6] = ai_block4;
                                     else if (right_human_num == 4 && right_Ai_num == 0 && tuple6type[p1][p2][p3][p4][p5][p6] == 0)
@@ -143,7 +146,7 @@ void GoBangAi::init() {
                                     else if (right_human_num == 2 && right_Ai_num == 0 && tuple6type[p1][p2][p3][p4][p5][p6] == 0)
                                         tuple6type[p1][p2][p3][p4][p5][p6] = human_block2;
                                 }
-                                else if (p1 != Border_Player && p6 == Border_Player) {
+                                else if (p1 != Border && p6 == Border) {
                                     if (left_human_num == 0 && left_Ai_num == 4 && tuple6type[p1][p2][p3][p4][p5][p6] == 0)
                                         tuple6type[p1][p2][p3][p4][p5][p6] = ai_block4;
                                     else if (left_human_num == 4 && left_Ai_num == 0 && tuple6type[p1][p2][p3][p4][p5][p6] == 0)
@@ -179,15 +182,19 @@ void GoBangAi::init() {
         }
     }
 }
+/*-----------------------------game logic----------------------------------*/
 
+/*------------------------------evaluate-----------------------------------*/
+//make a board with border from the original board
 void GoBangAi::set_eval_board(int board[Grid_num][Grid_num], int board_with_border[Grid_num + 2][Grid_num + 2]) {
     for (int i = 0; i < Grid_num + 2; i++)
-        board_with_border[0][i] = board_with_border[16][i] = board_with_border[i][0] = board_with_border[i][16] = Border_Player;
+        board_with_border[0][i] = board_with_border[16][i] = board_with_border[i][0] = board_with_border[i][16] = Border;
     for (int i = 0; i < Grid_num; i++)
         for (int j = 0; j < Grid_num; j++)
             board_with_border[i + 1][j + 1] = board[i][j];
 }
 
+//evaluate by number of pieces
 int GoBangAi::gettuplescore(int humannum, int ainum, int c) {
     if(c == H1_Player && humannum == 5)
         return 9999999;
@@ -235,20 +242,23 @@ int GoBangAi::gettuplescore(int humannum, int ainum, int c) {
     }
 }
 
+//evaluate one position greedy
 int GoBangAi::evaluateOnePos(int board[Grid_num][Grid_num], int row, int col, int c) {
     int res = 0;
-    for(int d = 0; d < dir_num; d++) {
-        for(int i = 0; i < 5; i++) {
-            BoardPosition st = getPoint(row, col, d, i - 4), ed = getPoint(st.y, st.x, d, 4);
+    for(int d = 0; d < dir_num; d++) { // traverse the direction
+        for(int i = 0; i < 5; i++) { // traverse the length
+            Point st = getPoint(row, col, d, i - 4), ed = getPoint(st.y, st.x, d, 4);
             if(isInside(st.y, st.x) && isInside(ed.y, ed.x)) {
+                //calculate the number of pieces respectively
                 int humannum = 0, ainum = 0;
                 for(int k = 0; k < 5; k++) {
-                    BoardPosition temp = getPoint(st.y, st.x, d, k);
+                    Point temp = getPoint(st.y, st.x, d, k);
                     if(board[temp.y][temp.x] == H1_Player)
                         humannum++;
                     else if(board[temp.y][temp.x] == AI_Player)
                         ainum++;
                 }
+                //update the result
                 res += gettuplescore(humannum, ainum, c);
             }
         }
@@ -257,11 +267,13 @@ int GoBangAi::evaluateOnePos(int board[Grid_num][Grid_num], int row, int col, in
 }
 
 Evaluation GoBangAi::evaluateBoard(int board[Grid_num][Grid_num]) {
+    //init record array
     int state[dir_num][status_num];
     memset(state, 0, sizeof(state));
     int board_with_border[Grid_num + 2][Grid_num + 2];
     set_eval_board(board, board_with_border);
 
+    //calculate the number of all types in 4 directions
     for (int d = 0; d < dir_num; d++) {
         int start_i, end_i, start_j, end_j;
         if (direction[d][0] == 0)
@@ -283,6 +295,7 @@ Evaluation GoBangAi::evaluateBoard(int board[Grid_num][Grid_num]) {
         }
     }
 
+    //calculate the score and record special states
     Evaluation res;
     memset(res.state, 0, sizeof(res.state));
 
@@ -315,7 +328,9 @@ Evaluation GoBangAi::evaluateBoard(int board[Grid_num][Grid_num]) {
 
     return res;
 }
+/*------------------------------evaluate-----------------------------------*/
 
+/*--------------------------------search-----------------------------------*/
 Points GoBangAi::seekPoints(int board[Grid_num][Grid_num]) {
     Points points;
     bool vis[Grid_num][Grid_num];
@@ -334,14 +349,8 @@ Points GoBangAi::seekPoints(int board[Grid_num][Grid_num]) {
     for (int i = 0; i < Grid_num; i++) {
         for (int j = 0; j < Grid_num; j++) {
             worth[i][j] = -INT_MAX;
-            if(board[i][j] == No_Player && vis[i][j] == true) {
+            if(board[i][j] == No_Player && vis[i][j] == true)
                 worth[i][j] = evaluateOnePos(board, i, j, AI_Player);
-                /*
-                board[i][j] = H1_Player;
-                worth[i][j] = evaluateBoard(board).score;
-                board[i][j] = No_Player;
-                */
-            }
         }
     }
 
@@ -352,7 +361,7 @@ Points GoBangAi::seekPoints(int board[Grid_num][Grid_num]) {
             for (int j = 0; j < Grid_num; j++) {
                 if (worth[i][j] > w) {
                     w = worth[i][j];
-                    BoardPosition temp(j, i);
+                    Point temp(j, i);
                     points.point[k] = temp;
                 }
             }
@@ -388,8 +397,7 @@ void GoBangAi::reverseBoard(int source[Grid_num][Grid_num], int board[Grid_num][
 
 int GoBangAi::MinMax_Search_with_Purning(int board[Grid_num][Grid_num], int depth, int alpha, int beta) {
     Evaluation eval = evaluateBoard(board);
-    if (depth == 0 || eval.result != result_draw) {
-        node_num++;
+    if (depth == 0 || eval.result != result_draw) { // reach the max depth or find a kill result
         if (depth == 0) {
             Points p = seekPoints(board);
             return p.score[0];
@@ -411,6 +419,7 @@ int GoBangAi::MinMax_Search_with_Purning(int board[Grid_num][Grid_num], int dept
                     select_point_score = a;
                 }
             }
+            //purning
             if (beta <= alpha)
                 break;
         }
@@ -427,11 +436,33 @@ int GoBangAi::MinMax_Search_with_Purning(int board[Grid_num][Grid_num], int dept
             int a = MinMax_Search_with_Purning(copyboard, depth - 1, alpha, beta);
             if (a < beta)
                 beta = a;
+            //purning
             if (beta <= alpha)
                 break;
         }
         return beta;
     }
+}
+
+QList<Point> GoBangAi::seek_kill_points(int board[Grid_num][Grid_num]) {
+    QList<Point> pointlist;
+    Points p = seekPoints(board);
+    int copyboard[Grid_num][Grid_num];
+    copyBoard(board, copyboard);
+    for(int i = 0; i < Point_num; i++) {
+        copyboard[p.point[i].y][p.point[i].x] = AI_Player;
+        Evaluation a = evaluateBoard(copyboard), b = evaluateBoard(board);
+        if(a.state[ai_win] > 0)
+            pointlist.append(p.point[i]);
+        else if(a.state[ai_flex4] > b.state[ai_flex4])
+            pointlist.append(p.point[i]);
+        else if(a.state[ai_block4] > b.state[ai_block4])
+            pointlist.append(p.point[i]);
+        else if(a.state[ai_flex3] > b.state[ai_flex3])
+            pointlist.append(p.point[i]);
+        copyboard[p.point[i].y][p.point[i].x] = No_Player;
+    }
+    return pointlist;
 }
 
 bool GoBangAi::find_kill(int board[Grid_num][Grid_num], int depth) {
@@ -440,13 +471,13 @@ bool GoBangAi::find_kill(int board[Grid_num][Grid_num], int depth) {
         if(depth == 0) {
             Points p = seekPoints(board);
             board[p.point[0].y][p.point[0].x] = AI_Player;
-            Results result = evaluateBoard(board).result;
-            if(result == ai_win)
+            GameResult result = evaluateBoard(board).result;
+            if(result == result_ai_win)
                 return true;
             else
                 return false;
         }
-        else if(eval.result == ai_win)
+        else if(eval.result == result_ai_win)
             return true;
         else
             return false;
@@ -457,15 +488,45 @@ bool GoBangAi::find_kill(int board[Grid_num][Grid_num], int depth) {
             for(int i = 0; i < 10; i++) {
                 int copyboard[Grid_num][Grid_num];
                 copyBoard(board, copyboard);
+                copyboard[p.point[i].y][p.point[i].x] = AI_Player;
+                if(find_kill(copyboard, depth - 1)) {
+                    if(depth == 16)
+                        select_point = p.point[i];
+                    return true;
+                }
             }
+            return false;
         }
+        else {
+            QList<Point> pointlist = seek_kill_points(board);
+            if(pointlist.length() == 0)
+                return false;
+            for(auto i : pointlist) {
+                int copyboard[Grid_num][Grid_num];
+                copyBoard(board, copyboard);
+                copyboard[i.y][i.x] = AI_Player;
+                if(find_kill(copyboard, depth - 1))
+                    return true;
+            }
+            return false;
+        }
+    }
+    else {
+        int reverseboard[Grid_num][Grid_num];
+        reverseBoard(board, reverseboard);
+        Points p = seekPoints(reverseboard);
+        int copyboard[Grid_num][Grid_num];
+        copyBoard(board, reverseboard);
+        copyboard[p.point[0].y][p.point[0].x] = H1_Player;
+        return find_kill(copyboard, depth - 1);
     }
 }
 
-BoardPosition GoBangAi::ai_run() {
+Point GoBangAi::ai_run() {
     if(gobang_cnt == 0)
         return {Grid_num / 2 - 1, Grid_num / 2 - 1};
-    if(!find_kill(GoBangboard, 16))
-        MinMax_Search_with_Purning(GoBangboard, 6, -INT_MAX, INT_MAX);
+    //if(!find_kill(GoBangboard, 16))
+    MinMax_Search_with_Purning(GoBangboard, 6, -INT_MAX, INT_MAX);
     return select_point;
 }
+/*--------------------------------search-----------------------------------*/

@@ -33,15 +33,15 @@ bool GoBangBoard::isInside(int r, int c) const {
     return r >= 0 && r < Grid_num && c >= 0 && c < Grid_num;
 }
 
-bool GoBangBoard::isInside(const BoardPosition& c) const {
+bool GoBangBoard::isInside(const Point& c) const {
     return c.x >= 0 && c.x < Grid_num && c.y >= 0 && c.y < Grid_num;
 }
 
-bool GoBangBoard::isAvaliable(const BoardPosition& c) const {
+bool GoBangBoard::isAvaliable(const Point& c) const {
     return c.x >= 0 && c.x < Grid_num && c.y >= 0 && c.y < Grid_num && board[c.y][c.x] == No_Player;
 }
 
-bool GoBangBoard::win(const BoardPosition &move, const int id) {
+bool GoBangBoard::win(const Point& move, const int id) {
     const int dr[] = {-1, 1, 0, 0, 1, 1, -1, -1};
     const int dc[] = {0, 0, -1, 1, 1, -1, 1, -1};
     int r, c, r0 = move.y, c0 = move.x, cnt;

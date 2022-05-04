@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
     , game_mode(PVP)
     , black_player_id(H1_Player)
 {
-    qRegisterMetaType<BoardPosition>("BoardPosition");
+    qRegisterMetaType<Point>("Point");
     this->initWindow();
     this->initButton();
     this->initConnections();
@@ -147,7 +147,7 @@ void MainWindow::startPVEGame() {
     gobang_board.setBlackPlayerID(black_player_id);
     if(black_player_id == AI_Player) {
         ai.set_id(true);
-        const BoardPosition &next_move = ai.ai_run();
+        const Point &next_move = ai.ai_run();
         this->aiMove(next_move);
     }
     else if(black_player_id == H1_Player)
@@ -178,8 +178,8 @@ void MainWindow::resetPVPGame() {
 
 void MainWindow::retractPVEGame() {
     if(gobang_cnt >= 3) {
-        const BoardPosition& last_human_move = record_moves[gobang_cnt - 2];
-        const BoardPosition& last_ai_move = record_moves[gobang_cnt - 1];
+        const Point& last_human_move = record_moves[gobang_cnt - 2];
+        const Point& last_ai_move = record_moves[gobang_cnt - 1];
         ai.takePiece(last_human_move.x, last_human_move.y);
         ai.takePiece(last_ai_move.x, last_ai_move.y);
         gobang_board.takePiece(last_human_move.x, last_human_move.y);
@@ -196,8 +196,8 @@ void MainWindow::retractPVEGame() {
 
 void MainWindow::retractPVPGame() {
     if(gobang_cnt > 2) {
-        const BoardPosition& last_H1_player_move = record_moves[gobang_cnt - 2];
-        const BoardPosition& last_H2_player_move = record_moves[gobang_cnt - 1];
+        const Point& last_H1_player_move = record_moves[gobang_cnt - 2];
+        const Point& last_H2_player_move = record_moves[gobang_cnt - 1];
         gobang_board.takePiece(last_H1_player_move.x, last_H1_player_move.y);
         gobang_board.takePiece(last_H2_player_move.x, last_H2_player_move.y);
         gobang_cnt -= 2;
@@ -219,7 +219,7 @@ void MainWindow::PVERound() {
     }
     else {
         now_player_id = AI_Player;
-        const BoardPosition &next_move = ai.ai_run();
+        const Point &next_move = ai.ai_run();
         this->aiMove(next_move);
     }
 }
@@ -247,7 +247,7 @@ void MainWindow::PVPRound() {
     }
 }
 
-void MainWindow::PVEPutPiece(const BoardPosition &next_move, const int id) {
+void MainWindow::PVEPutPiece(const Point &next_move, const int id) {
     if(gobang_board.isAvaliable(next_move)) {
         gobang_board.putPiece(next_move.x, next_move.y, id);
         ai.putPiece(next_move.x, next_move.y, id);
@@ -256,14 +256,14 @@ void MainWindow::PVEPutPiece(const BoardPosition &next_move, const int id) {
     }
 }
 
-void MainWindow::PVPPutPiece(const BoardPosition &next_move, const int id) {
+void MainWindow::PVPPutPiece(const Point &next_move, const int id) {
     if(gobang_board.isAvaliable(next_move)) {
         gobang_board.putPiece(next_move.x, next_move.y, id);
         record_moves[gobang_cnt++] = next_move;
     }
 }
 
-void MainWindow::aiMove(const BoardPosition& next_move) {
+void MainWindow::aiMove(const Point& next_move) {
     this->PVEPutPiece(next_move, AI_Player);
     this->update();
     if(gobang_board.win(next_move, AI_Player)) {
@@ -282,11 +282,8 @@ void MainWindow::paintEvent(QPaintEvent *event) {
     painter.init();
     painter.DrawBoard();
 
-    if(gobang_board.isAvaliable(mouse_cursor) && now_player_id != AI_Player)
-        painter.DrawMark();
-
     //draw all chess pieces
-    painter.DrawChessPieces(gobang_board);
+    painter.DrawPieces(gobang_board);
 
     //draw last move
     if(gobang_cnt && gobang_board.isInside(record_moves[gobang_cnt - 1]))
@@ -296,7 +293,7 @@ void MainWindow::paintEvent(QPaintEvent *event) {
 void MainWindow::mouseMoveEvent(QMouseEvent *event) {
     int x = event->x(), y = event->y();
     if(x >= Board_start_X && x <= Board_end_X && y >= Board_start_Y && y <= Board_end_Y) {
-        BoardPosition near_pos((x - Board_start_X) / Grid_Width, (y - Board_start_Y) / Grid_Width);
+        Point near_pos((x - Board_start_X) / Grid_Width, (y - Board_start_Y) / Grid_Width);
         this->findNearPos(near_pos, x, y);
         this->update();
     }
@@ -328,7 +325,7 @@ int MainWindow::Distance(int x0, int y0, int x1, int y1) {
     return (int)sqrt(dx * dx + dy * dy);
 }
 
-void MainWindow::findNearPos(const BoardPosition &near_pos, int x, int y) {
+void MainWindow::findNearPos(const Point &near_pos, int x, int y) {
     const int dx[] = {0, 1, 0, 1};
     const int dy[] = {0, 0, 1, 1};
     int x0 = Board_start_X + Grid_Width * near_pos.x, y0 = Board_start_Y + Grid_Width * near_pos.y;

@@ -9,19 +9,19 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    BoardPosition.cpp \
     DrawPainter.cpp \
     GoBangAi.cpp \
     GoBangBoard.cpp \
+    Point.cpp \
     PushButton.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
-    BoardPosition.h \
     DrawPainter.h \
     GoBangAi.h \
     GoBangBoard.h \
+    Point.h \
     PushButton.h \
     base.h \
     mainwindow.h

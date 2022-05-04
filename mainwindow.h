@@ -5,7 +5,7 @@
 
 #include "GoBangBoard.h"
 #include "base.h"
-#include "BoardPosition.h"
+#include "Point.h"
 #include "PushButton.h"
 #include "GoBangAi.h"
 #include "DrawPainter.h"
@@ -36,9 +36,9 @@ public:
     void retractPVPGame();
     void PVERound();
     void PVPRound();
-    void PVEPutPiece(const BoardPosition &next_move, const int id);
-    void PVPPutPiece(const BoardPosition &next_move, const int id);
-    void aiMove(const BoardPosition& next_move);
+    void PVEPutPiece(const Point &next_move, const int id);
+    void PVPPutPiece(const Point &next_move, const int id);
+    void aiMove(const Point& next_move);
 
 private:
     Ui::MainWindow *ui;
@@ -48,8 +48,8 @@ private:
     int black_player_id;
     GoBangBoard gobang_board;
 
-    BoardPosition mouse_cursor;
-    BoardPosition record_moves[Grid_num * Grid_num];
+    Point mouse_cursor;
+    Point record_moves[Grid_num * Grid_num];
     int gobang_cnt;
 
     GoBangAi ai;
@@ -58,7 +58,7 @@ private:
     PushButton button_menu[Button_Menu_num];
 
     int Distance(int x0, int y0, int x1, int y1);
-    void findNearPos(const BoardPosition & near_pos, int x, int y);
+    void findNearPos(const Point & near_pos, int x, int y);
 
     void paintEvent(QPaintEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
