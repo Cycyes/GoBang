@@ -416,7 +416,7 @@ int GoBangAi::MinMax_Search_with_Purning(int board[Grid_num][Grid_num], int dept
             int a = MinMax_Search_with_Purning(copyboard, depth - 1, alpha, beta);
             if (a > alpha) {
                 alpha = a;
-                if (depth == 8) {
+                if (depth == 6) {
                     select_point = p.point[i];
                     select_point_score = a;
                 }
@@ -528,7 +528,7 @@ Point GoBangAi::ai_run() {
     if(gobang_cnt == 0)
         return {Grid_num / 2, Grid_num / 2};
     //if(!find_kill(GoBangboard, 16))
-    MinMax_Search_with_Purning(GoBangboard, 8, -INT_MAX, INT_MAX);
+    MinMax_Search_with_Purning(GoBangboard, 6, -INT_MAX, INT_MAX);
     return select_point;
 }
 /*--------------------------------search-----------------------------------*/
