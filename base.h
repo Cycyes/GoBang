@@ -64,7 +64,7 @@ enum Button_Ctrl {
 };
 
 enum Button_Ctrl_Pos {
-    Button_Ctrl_Width = 86,
+    Button_Ctrl_Width = 90,
     Button_Ctrl_Height = 36,
     Button_Ctrl_start_X = Board_start_X + Button_Ctrl_Height / 4 + 3,
     Button_Ctrl_end_X = Board_end_X - Button_Ctrl_Width - Button_Ctrl_Height / 4 - 3,

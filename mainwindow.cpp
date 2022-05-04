@@ -77,7 +77,7 @@ void MainWindow::initButton() {
 
     for(int i = 0; i < 3; i++) {
         message_text[i].setParent(this);
-        message_text[i].setGeometry(Button_Ctrl_start_X + (i + 1) * Button_Ctrl_D, Button_Ctrl_start_Y + 50, Button_Ctrl_Width + 20, Button_Ctrl_Height);
+        message_text[i].setGeometry(Button_Ctrl_start_X + (i + 1) * Button_Ctrl_D, Button_Ctrl_start_Y + 50, Button_Ctrl_Width + 50, Button_Ctrl_Height);
     }
 
     message_text[2].setText(QString("当前步数：%1").arg(gobang_cnt));
@@ -327,13 +327,12 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event) {
 }
 
 void MainWindow::mousePressEvent(QMouseEvent *event) {
-    /*
     if(ReleaseCapture() && event->y() <= Button_Menu_D) {
         QWidget *pWindow = this->window();
         if(pWindow->isTopLevel())
             SendMessage(HWND(pWindow->winId()),WM_SYSCOMMAND, SC_MOVE + HTCAPTION, 0);
     }
-    */
+
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
